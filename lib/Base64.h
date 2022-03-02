@@ -3,12 +3,21 @@ using std::string;
 
 class Base64 {
 	private:
-		char* table;
+		const char table[65] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 		string msgPlainText;
+
 		string fromStringToBinaryDigit() const;
+		string encodeText() const;
+
 	public:
 		Base64();
-		Base64(string& text);
+		Base64(const string& text);
+		Base64(const char* text);
 		~Base64() = default;
+
 		string encodeB64() const;
+
+		/* OPERATOR OVERLOADING */
+		void operator= (const string&);
+		void operator= (const char*);
 };

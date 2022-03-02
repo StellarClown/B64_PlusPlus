@@ -11,5 +11,5 @@
   ```
 - Run the program as follows:
   ```bash
-  .\build\Release\B64_PlusPlus.exe
+  .\build\Release\B64_PlusPlus.exe "YOUR_TEXT_HERE" -e
   ```

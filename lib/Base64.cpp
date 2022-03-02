@@ -8,50 +8,62 @@ using std::stringstream;
 using std::reverse;
 using std::string;
 
-Base64::Base64() : table(nullptr), msgPlainText("") {
+
+/*
+	CONSTRUCTORS
+*/
+Base64::Base64() : msgPlainText("") {
 	;
 }
 
-Base64::Base64(string& text) : table{ new char[65] }, msgPlainText(text) {
-	table = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+Base64::Base64(const string& text) : msgPlainText(text) {
+	;
 }
 
+Base64::Base64(const char* text) : msgPlainText(text) {
+	;
+}
+
+
+/*
+	LOGIC
+*/
 string Base64::fromStringToBinaryDigit() const {
 	string finalSeqBit;
 
-	//Convert the string in a sequence of binary digit
+	//I convert the whole string to a sequence of bits
 	for (uint8_t x : this->msgPlainText) {
-		uint8_t mask = 1;
+		uint8_t maskToApply = 1;
 		stringstream toBin;
 
+		//I extract the bits of the single character
 		for (uint8_t i = 0; i < 8; i++) {
-			if (x & mask)
+			if (x & maskToApply)
 				toBin << "1";
 			else
 				toBin << "0";
-			mask <<= 1;
+			maskToApply <<= 1;
 		}
 
 		string toAppend = toBin.str();
 		reverse(toAppend.begin(), toAppend.end());
+
 		finalSeqBit += toAppend;
 	}
 
 	return finalSeqBit;
 }
 
-string Base64::encodeB64() const {
-	string encoded = "";
-
-	if (!table || this->msgPlainText == "")
-		return encoded;
-
-	string seqOfText = fromStringToBinaryDigit();
-	int16_t binSel = 5;
-	uint16_t indexTable = 0;
-	for (char& bin : seqOfText) {
+string Base64::encodeText() const {
+	string toRet = "";
+	
+	//I divide the sequence of bits into groups of 6 and extract the character from the table
+	string bitText = fromStringToBinaryDigit();
+	int8_t binSel = 5;
+	uint8_t indexTable = 0;
+	for (char bin : bitText) {
 		if (binSel < 0) {
-			encoded += table[indexTable];
+			toRet += table[indexTable];
 			binSel = 5;
 			indexTable = 0;
 		}
@@ -59,10 +71,30 @@ string Base64::encodeB64() const {
 			indexTable += pow(2, binSel);
 		binSel--;
 	}
-	encoded += table[indexTable];
+	toRet += table[indexTable];
 
-	while (encoded.length() % 4)
-		encoded += "=";
+	//I add a padding of '=' from 0 to 2 until the string is a multiple of 4
+	while (toRet.length() % 4)
+		toRet += "=";
 
-	return encoded;
+	return toRet;
+}
+
+string Base64::encodeB64() const {
+	if (!this->msgPlainText.length())
+		return "";
+
+	return encodeText();
+}
+
+
+/*
+	OPERATORS
+*/
+void Base64::operator= (const string& text) {
+	msgPlainText = text;
+}
+
+void Base64::operator= (const char* text) {
+	msgPlainText = text;
 }

@@ -1,5 +1,5 @@
 # <p align="center">B64_PlusPlus</p>
-<p align="center">A small C ++ program that implements Base64 encoding</p>
+<p align="center">A small C++ program that implements Base64 encoding</p>
 
 ## Instructions for Use
 - Compile the program with the following command:

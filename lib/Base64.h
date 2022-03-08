@@ -6,8 +6,8 @@ class Base64 {
 		const char table[65] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 		string msgPlainText;
 
-		string fromStringToBinaryDigit() const;
 		string encodeText() const;
+		string decodeText() const;
 
 	public:
 		Base64();
@@ -16,6 +16,7 @@ class Base64 {
 		~Base64() = default;
 
 		string encodeB64() const;
+		string decodeB64() const;
 
 		/* OPERATOR OVERLOADING */
 		void operator= (const string&);
